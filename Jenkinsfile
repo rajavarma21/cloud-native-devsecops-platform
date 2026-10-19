@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Validate Docker Compose') {
             steps {
-                sh 'docker compose config -q'
+                sh 'docker compose config'
             }
         }
          stage('Backend Tests') {
