@@ -1,18 +1,27 @@
+
 const express = require('express');
 const helmet = require('helmet');
 const { createClient } = require('redis');
+const cors = require('cors');
 
 const app = express();
-const redisUrl = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
+const PORT = Number(process.env.PORT) || 5000;
+const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
+const FRONTEND_ORIGIN =
+  process.env.FRONTEND_ORIGIN || 'http://localhost:5174';
 
-const redis = createClient({ url: redisUrl });
+const redis = createClient({ url: REDIS_URL });
+
+let server;
+
 redis.on('error', (error) => {
   console.error('Redis client error:', error.message);
 });
 
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(express.json());
+app.use(cors({ origin: FRONTEND_ORIGIN }));
+app.use(express.json({ limit: '10kb' }));
 
 app.get('/', (_req, res) => {
   res.json({
@@ -22,7 +31,6 @@ app.get('/', (_req, res) => {
   });
 });
 
-// Liveness: checks that the API process can respond.
 app.get('/health', (_req, res) => {
   res.status(200).json({
     status: 'healthy',
@@ -31,7 +39,6 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Readiness: checks whether the API can use Redis.
 app.get('/health/ready', async (_req, res) => {
   try {
     if (!redis.isReady) {
@@ -56,7 +63,6 @@ app.get('/health/ready', async (_req, res) => {
   }
 });
 
-// Redis-backed counter.
 app.post('/api/counter/increment', async (_req, res) => {
   try {
     if (!redis.isReady) {
@@ -70,15 +76,11 @@ app.post('/api/counter/increment', async (_req, res) => {
   }
 });
 
-let server;
-
 async function start() {
   await redis.connect();
 
-  const port = Number(process.env.PORT) || 5000;
-
-  server = app.listen(port, '0.0.0.0', () => {
-    console.log(`CloudForge API listening on port ${port}`);
+  server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`CloudForge API listening on port ${PORT}`);
   });
 }
 
