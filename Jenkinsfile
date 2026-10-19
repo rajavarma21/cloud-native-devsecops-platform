@@ -13,7 +13,11 @@ pipeline {
                 checkout scm
             }
         }
-
+        stage('Validate Docker Compose') {
+            steps {
+                sh 'docker compose config --quiet'
+            }
+        }
          stage('Backend Tests') {
             steps {
                 dir('application/backend') {
