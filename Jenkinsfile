@@ -62,12 +62,12 @@ pipeline {
                     docker run --rm \
                       -v /var/run/docker.sock:/var/run/docker.sock \
                       -v cloudforge-trivy-cache:/root/.cache/ \
-                      -v "$WORKSPACE/reports:/reports" \
+                      -v cloud-native-devsecops-platform_jenkins-home:/jenkins-home \
                       aquasec/trivy:latest image \
                       --scanners vuln \
                       --severity HIGH,CRITICAL \
                       --format json \
-                      --output /reports/trivy-backend.json \
+                      --output "/jenkins-home/workspace/CloudForge-CI/reports/trivy-backend.json" \
                       --exit-code 1 \
                       cloudforge-backend:ci
                 '''
@@ -75,12 +75,12 @@ pipeline {
                     docker run --rm \
                       -v /var/run/docker.sock:/var/run/docker.sock \
                       -v cloudforge-trivy-cache:/root/.cache/ \
-                      -v "$WORKSPACE/reports:/reports" \
+                      -v cloud-native-devsecops-platform_jenkins-home:/jenkins-home \
                       aquasec/trivy:latest image \
                       --scanners vuln \
                       --severity HIGH,CRITICAL \
                       --format json \
-                      --output /reports/trivy-frontend.json \
+                      --output "/jenkins-home/workspace/CloudForge-CI/reports/trivy-frontend.json" \
                       --exit-code 1 \
                       cloudforge-frontend:ci
                 '''
