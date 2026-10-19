@@ -14,15 +14,16 @@ pipeline {
             }
         }
 
-        stage('Backend Tests') {
+         stage('Backend Tests') {
             steps {
                 dir('application/backend') {
-                    sh 'npm ci'
-                    sh 'npm test'
+                    withEnv(['REDIS_URL=redis://ci-redis:6379']) {
+                        sh 'npm ci'
+                        sh 'npm test'
+                    }
                 }
             }
         }
-
         stage('Dependency Audit') {
             steps {
                 dir('application/backend') {
