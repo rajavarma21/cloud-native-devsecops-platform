@@ -186,23 +186,43 @@ The backend findings need further investigation. Review the affected packages, i
 
 A successful Jenkins build does not by itself mean that the backend image is vulnerability-free.
 
+## Troubleshooting
+
 ## Repository Structure
 
 ```text
 cloud-native-devsecops-platform/
+├── .github/
 ├── application/
 │   ├── backend/
+│   │   ├── src/
+│   │   │   └── server.js
+│   │   ├── tests/
+│   │   │   └── health.test.js
+│   │   ├── Dockerfile
+│   │   └── package.json
 │   └── frontend/
+│       ├── src/
+│       ├── public/
+│       ├── Dockerfile
+│       └── package.json
 ├── docs/
 │   └── screenshots/
 ├── jenkins/
+│   └── Dockerfile
+├── Jenkinsfile
 ├── docker-compose.yml
 ├── docker-compose.jenkins.yml
-├── Jenkinsfile
 └── README.md
 ```
 
-## Troubleshooting
+### Implementation status
+
+- **Application:** React frontend and Node.js backend with a backend health test.
+- **Containerization:** Dockerfiles and Docker Compose configurations.
+- **CI/CD:** Jenkins pipeline for backend tests, dependency auditing, image builds, and Trivy scans.
+- **Documentation:** Screenshots of the application, pipeline, containers, and security scans.
+- **AWS deployment:** Planned; AWS resources have not yet been provisioned.
 
 ### Check container status
 
