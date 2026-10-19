@@ -38,6 +38,31 @@ pipeline {
                 sh 'docker build -t cloudforge-frontend:ci ./application/frontend'
             }
         }
+
+        stage('Container Image Security Scan') {
+            steps {
+                sh '''
+                    docker run --rm \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
+                      -v cloudforge-trivy-cache:/root/.cache/ \
+                      aquasec/trivy:latest image \
+                      --scanners vuln \
+                      --severity HIGH,CRITICAL \
+                      --exit-code 0 \
+                      cloudforge-backend:ci
+                '''
+                sh '''
+                    docker run --rm \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
+                      -v cloudforge-trivy-cache:/root/.cache/ \
+                      aquasec/trivy:latest image \
+                      --scanners vuln \
+                      --severity HIGH,CRITICAL \
+                      --exit-code 0 \
+                      cloudforge-frontend:ci
+                '''
+            }
+        }
     }
 
     post {
