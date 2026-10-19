@@ -48,7 +48,7 @@ pipeline {
                       aquasec/trivy:latest image \
                       --scanners vuln \
                       --severity HIGH,CRITICAL \
-                      --exit-code 0 \
+                      --exit-code 1 \
                       cloudforge-backend:ci
                 '''
                 sh '''
@@ -58,7 +58,7 @@ pipeline {
                       aquasec/trivy:latest image \
                       --scanners vuln \
                       --severity HIGH,CRITICAL \
-                      --exit-code 0 \
+                      --exit-code 1 \
                       cloudforge-frontend:ci
                 '''
             }
