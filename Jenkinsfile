@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Validate Docker Compose') {
             steps {
-                sh 'docker compose config --quiet'
+                sh 'docker compose config -q'
             }
         }
          stage('Backend Tests') {
