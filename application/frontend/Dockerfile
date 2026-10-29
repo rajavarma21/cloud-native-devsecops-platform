@@ -15,7 +15,12 @@ RUN npm run build
 
 FROM nginx:stable-alpine3.24
 
-RUN apk update && apk upgrade --no-cache libexpat libx11
+RUN apk update && apk upgrade --no-cache \
+    libexpat \
+    libx11 \
+    brotli-libs \
+    curl \
+    libcurl
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
