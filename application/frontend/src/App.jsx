@@ -3,7 +3,7 @@ import {
   Activity, ShieldCheck, GitBranch, Boxes, LayoutDashboard,
   Server, Settings, Bell, Search, CheckCircle2, Clock3,
   ArrowUpRight, ArrowDownRight, Container, Workflow,
-  Menu, X, CircleDot, LockKeyhole, Cloud, Zap
+  Menu, X, CircleDot, LockKeyhole, Cloud, Zap, ExternalLink
 } from 'lucide-react'
 import './App.css'
 
@@ -133,6 +133,22 @@ function App() {
           </div>
           <div className="topbar-actions">
             <div className="environment"><span /> LOCAL ENVIRONMENT <ChevronMark /></div>
+            <a
+              className="quick-link"
+              href="http://localhost:8081/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Jenkins <ExternalLink size={14} />
+            </a>
+            <a
+              className="quick-link"
+              href="https://github.com/rajavarma21/cloud-native-devsecops-platform"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub <ExternalLink size={14} />
+            </a>
             <button className="icon-button notification-button" aria-label="Notifications" onClick={() => setNotice(!notice)}>
               <Bell size={19} /><i />
             </button>
@@ -141,7 +157,47 @@ function App() {
         </header>
 
         {notice && <div className="notice-popover">You're all caught up. No new notifications.</div>}
+        {active === 'Deployments' && (
+          <section className="panel deployment-view">
+            <div className="panel-heading">
+              <div>
+                <div className="panel-kicker">CONTINUOUS DELIVERY</div>
+                <h2>Jenkins pipeline</h2>
+              </div>
+              <span className="subtle-badge">
+                <Activity size={13} /> Jenkins integration
+              </span>
+            </div>
 
+            <p className="panel-description">
+              Inspect your CI/CD builds, test results, and security reports.
+            </p>
+
+            <div className="deployment-actions">
+              <a
+                className="quick-link"
+                href="http://localhost:8081/job/CloudForge-CI/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open CloudForge-CI <ExternalLink size={14} />
+              </a>
+
+              <a
+                className="quick-link"
+                href="http://localhost:8081/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Jenkins dashboard <ExternalLink size={14} />
+              </a>
+            </div>
+
+            <p className="panel-description">
+              Build status is shown in Jenkins; this page does not yet fetch live build data.
+            </p>
+          </section>
+        )}
         <div className="page-content">
           <section className="welcome-row">
             <div>
@@ -154,7 +210,7 @@ function App() {
               </p>
             </div>
             <button className="primary-button" onClick={() => setNotice(true)}>
-              <Activity size={17} /> Platform status <span className="button-live-dot" />
+            <Activity size={17} /> Platform status <span className="button-live-dot" />
             </button>
           </section>
 
@@ -246,11 +302,13 @@ function App() {
                 <ShieldCheck size={20} className="heading-icon" />
               </div>
               <div className="security-score">
-                <div className="score-ring"><div><strong>--</strong><span>NOT SCANNED</span></div></div>
-                <div className="score-copy"><strong>Security scanning not connected</strong><p>Trivy, dependency auditing, and code analysis will be added to the pipeline.</p></div>
+                <div className="score-ring"><div><strong>--</strong><span>REPORTS IN JENKINS</span></div></div>
+                <div className="score-copy"><strong>Security reports available in Jenkins</strong><p>Review Trivy container scans, dependency audit results, and backend test reports from the CI pipeline.</p><a className="quick-link" href="http://localhost:8081/job/CloudForge-CI/lastSuccessfulBuild/" target="_blank" rel="noreferrer">View latest successful build <ExternalLink size={14} /></a></div>
               </div>
-              <div className="security-tags"><span><LockKeyhole size={13} /> Dependency audit</span><span><ShieldCheck size={13} /> Container scan</span></div>
-            </div>
+              <div className="security-tags">
+                <span><LockKeyhole size={13} /> Dependency audit</span>
+                <span><ShieldCheck size={13} /> Container scan</span>
+              </div>            </div>
 
             <div className="panel roadmap-panel">
               <div className="panel-heading">
